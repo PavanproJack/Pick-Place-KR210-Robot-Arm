@@ -28,8 +28,8 @@ Frames assignment rules:
 ```
 1. Label all the joints from 1 to n
 2. Label all the links from 0 to n with 0 being the base link.
-3. Draw dotted lines defining all the joint axes. Z-axis is always the joint axis for both revoulte and prismatic joints.
-4. Define common normals between the joint axes(Z_n-1 and Z_n). The co-normal is orthogonal to the both axes.
+3. Z-axis is always the joint axis for both revoulte and prismatic joints.
+4. Define common normals between the joint axes(Z_n-1 and Z_n) orthogonal to both the axes.
 5. New X-axis(X_n) points along the co-normal and has its origin at the intersection of co-normal and new Z-axis.
 6. 'd' is the depth along the previous joint's Z-axis(Z_n-1) to the common normal. More simplified, it is the distance along    Z_n−1 from O_n−1(previous joint's origin) to the intersection of the X_n and Z_n−1 axes (which is the new origin).
 7. Theta is the angle about previous Z-axis(Z_n-1) to align its X-axis(X_n-1) with the new X-axis(X_n)
