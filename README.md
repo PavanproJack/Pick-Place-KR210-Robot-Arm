@@ -25,6 +25,7 @@ Under this convention rotations only about z-axis and translations along x-axis 
 
 Frames assignment rules:
 ```
+```
 1. Label all the joints from 1 to n
 2. Label all the links from 0 to n with 0 being the base link.
 3. Draw dotted lines defining all the joint axes. Z-axis is always the joint axis for both revoulte and prismatic joints.
@@ -34,12 +35,13 @@ Frames assignment rules:
 7. Theta is the angle about previous Z-axis(Z_n-1) to align its X-axis(X_n-1) with the new X-axis(X_n)
 8. 'a' is length of the co-normal itself. Infact, it is the distance along X_n from O_n to the intersection of the X_n and Z_n−1 axes
 9. Finally, Alpha is the rotation about new X_n axis to align Z_n-1 and Z_n axes.
-```
+
 
 ### KR210 schematic diagram with frames attached:
 
 
 ### Digesting URDF file to populate DH table:
+Unified Robot Description Format or urdf, is an XML format used in ROS for representing a robot model. We can use a urdf file to define a robot model, its kinodynamic properties, visual elements and even model sensors for the robot.
 
 | Frame(i) | θ | 𝜶 | r | d |
 |-------|--------|---------|--------|---------|
@@ -60,6 +62,7 @@ Kinematic decoupling is used to consider position and orientation problems indep
 ## References:
 ```
 http://www4.cs.umanitoba.ca/~jacky/Robotics/Papers/spong_kinematics.pdf
+https://www.youtube.com/watch?v=rA9tm0gTln8
 
 ```
 
