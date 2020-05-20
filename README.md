@@ -1,7 +1,7 @@
 [![Udacity - Robotics NanoDegree Program](https://s3-us-west-1.amazonaws.com/udacity-robotics/Extra+Images/RoboND_flag.png)](https://www.udacity.com/robotics)
 # KR210 Robotic arm - Pick & Place project
 This project is adopted from Udacity - Robotics NanoDegree Program. Modified and Implemented the Pick and Place Functionality with new approaches.
-  
+<img src = "/misc_images/Kuka_KR210.jpg" width = "300">  <img src = "Workspace XZ axes.png" width = "300"> 
 This documentation demonstrates my perception and the steps involved in completing this project. 
 
 Initial setup of ROS+Gazebo with VMware Fusion can be found in the Installation_instr.md file in this repo.
@@ -58,7 +58,7 @@ Unified Robot Description Format or urdf, is an XML format used in ROS for repre
 
 
 ## Inverse Kinematics of 6R KR210 arm:
-
+<img src = "/misc_images/Inverse Position Schematic.png" width = "300">  <img src = "Workspace XZ axes.png" width = "300"> 
 ### Kinematic Decoupling:
 Kinematic decoupling is used to consider position and orientation problems independently. Geometric approach is used for positioning problem and Euler angle parameterisation is used for orientation problem.
 
@@ -97,10 +97,9 @@ R3_6 = R3_4 * R4_5 * R5_6. This cannot be evaluated until we know Theta4, Theta5
 Also
 R0_6 = R0_3 * R3_6
 R3_g = Inverse(R0_3) * R0_6  that implies
-R3_6 = Transpose(R0_3) * R0_6  since rotation matrices have same inverse and transpose
-
+R3_6 = Transpose(R0_3) * R0_6  since rotation matrices have same inverse and transpose.
 ```
-Hence calculating θ1, θ2, θ3, θ4, θ5, θ6 will complete the inverse kinematics problem.
+Finally, calculating θ1, θ2, θ3, θ4, θ5, θ6 completes the inverse kinematics problem.
 
 
 
@@ -108,7 +107,7 @@ Hence calculating θ1, θ2, θ3, θ4, θ5, θ6 will complete the inverse kinemat
 ```
 http://www4.cs.umanitoba.ca/~jacky/Robotics/Papers/spong_kinematics.pdf
 https://www.youtube.com/watch?v=rA9tm0gTln8
-
+https://www.mroelectric.com/blog/kuka-robot-arm/
 ```
 
 
