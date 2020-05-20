@@ -1,7 +1,7 @@
 [![Udacity - Robotics NanoDegree Program](https://s3-us-west-1.amazonaws.com/udacity-robotics/Extra+Images/RoboND_flag.png)](https://www.udacity.com/robotics)
 # KR210 Robotic arm - Pick & Place project
 This project is adopted from Udacity - Robotics NanoDegree Program. Modified and Implemented the Pick and Place Functionality with new approaches.
-
+  
 This documentation demonstrates my perception and the steps involved in completing this project. 
 
 Initial setup of ROS+Gazebo with VMware Fusion can be found in the Installation_instr.md file in this repo.
@@ -10,9 +10,9 @@ Initial setup of ROS+Gazebo with VMware Fusion can be found in the Installation_
 Identify target object on the shelf, plan and perform a clean movement towards the object to grasp the object and place the in in the bin.
 
 ### Tools used:
-RVIZ:
+RViz (or rviz) stands for ROS Visualization tool or ROS Visualizer. RViz is our one stop tool to visualize all three core aspects of a robot: Perception, Decision Making, and Actuation.
 
-Gazebo:
+Gazebo: is a physics based high fidelity 3D simulator for robotics. Gazebo provides the ability to accurately simulate one or more robots in complex indoor and outdoor environments filled with static and dynamic objects, realistic lighting, and programmable interactions.
 
 MoveIT! is the software for building mobile manipulation applications.It integrates perception, kinematics, motion planning, trajectory processing and execution.
 
@@ -88,8 +88,19 @@ From the figure attached, Theta1 can be found to be
 ```
 
 #### Inverse Orientation: 
+Since Gripper is in same orientation with joint 6, R0_g = R0_6 and R3_6 = R3_g
 
+```
+R0_3 = R0_1 * R0_2 * R0_3
+With Theta1, Theta2 and Theta3, R0_3 can be evaluate numerically. Now
+R3_6 = R3_4 * R4_5 * R5_6. This cannot be evaluated until we know Theta4, Theta5 and Theta6
+Also
+R0_6 = R0_3 * R3_6
+R3_g = Inverse(R0_3) * R0_6  that implies
+R3_6 = Transpose(R0_3) * R0_6  since rotation matrices have same inverse and transpose
 
+```
+Hence calculating θ1, θ2, θ3, θ4, θ5, θ6 will complete the inverse kinematics problem.
 
 
 
