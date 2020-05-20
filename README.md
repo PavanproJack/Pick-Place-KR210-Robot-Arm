@@ -1,10 +1,12 @@
 [![Udacity - Robotics NanoDegree Program](https://s3-us-west-1.amazonaws.com/udacity-robotics/Extra+Images/RoboND_flag.png)](https://www.udacity.com/robotics)
 # KR210 Robotic arm - Pick & Place project
 This project is adopted from Udacity - Robotics NanoDegree Program. Modified and Implemented the Pick and Place Functionality with new approaches.
-<img src = "/misc_images/Kuka_KR210.jpg" width = "300">  <img src = "Workspace XZ axes.png" width = "300"> 
+
 This documentation demonstrates my perception and the steps involved in completing this project. 
 
 Initial setup of ROS+Gazebo with VMware Fusion can be found in the Installation_instr.md file in this repo.
+
+<img src = "/misc_images/Kuka_KR210.jpg" width = "300">  
 
 ## Problem Statement:
 Identify target object on the shelf, plan and perform a clean movement towards the object to grasp the object and place the in in the bin.
@@ -58,7 +60,7 @@ Unified Robot Description Format or urdf, is an XML format used in ROS for repre
 
 
 ## Inverse Kinematics of 6R KR210 arm:
-<img src = "/misc_images/Inverse Position Schematic.png" width = "300">  <img src = "Workspace XZ axes.png" width = "300"> 
+<img src = "/misc_images/KukaKR210_schematic.jpg" width = "300">   
 ### Kinematic Decoupling:
 Kinematic decoupling is used to consider position and orientation problems independently. Geometric approach is used for positioning problem and Euler angle parameterisation is used for orientation problem.
 
@@ -80,11 +82,13 @@ Here 'yaw', 'pitch' and 'roll' angles and P_x, P_y, P_z are provided by Ros mess
 
 Solve for the joint angles given the wrist center Wc in Geometric approach. 
 #### Inverse Position: A Geometric Approach:
+<img src = "/misc_images/Inverse Position Schematic.png" width = "300">   
 From the figure attached, Theta1 can be found to be 
 ```
 θ1 = atan2(Wc_y, Wc_x)
-θ2 = 
+θ2 = ....................
 θ3 = 
+
 ```
 
 #### Inverse Orientation: 
