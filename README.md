@@ -24,14 +24,17 @@ The advantage of DH representation is that, it is a minimal representation in th
 Under this convention rotations only about z-axis and translations along x-axis are allowed.
 
 Frames assignment rules:
+Assign the frames assuming all the joint co-ordinates are zero. For eg. zero rotation for revolute and zero displacement for prismatic.
 ```
 ```
 1. Label all the joints from 1 to n
 2. Label all the links from 0 to n with 0 being the base link.
-3. Z-axis is always the joint axis for both revoulte and prismatic joints.
+3. Z-axis is always the joint axis for both revoulte and prismatic joints. 
+   Attach frames 0 to base link and frame 'g' to the gripper(end-effector).
 4. Define common normals between the joint axes(Z_n-1 and Z_n) orthogonal to both the axes.
 5. New X-axis(X_n) points along the co-normal and has its origin at the intersection of co-normal and new Z-axis.
-6. 'd' is the depth along the previous joint's Z-axis(Z_n-1) to the common normal. More simplified, it is the distance along    Z_n−1 from O_n−1(previous joint's origin) to the intersection of the X_n and Z_n−1 axes (which is the new origin).
+6. 'd' is the depth along the previous joint's Z-axis(Z_n-1) to the common normal. 
+   More simplified, it is the distance along    Z_n−1 from O_n−1(previous joint's origin) to the intersection of the X_n and      Z_n−1 axes (which is the new origin).
 7. Theta is the angle about previous Z-axis(Z_n-1) to align its X-axis(X_n-1) with the new X-axis(X_n)
 8. 'a' is length of the co-normal itself. Infact, it is the distance along X_n from O_n to the intersection of the X_n and Z_n−1 axes
 9. Finally, Alpha is the rotation about new X_n axis to align Z_n-1 and Z_n axes.
@@ -43,13 +46,15 @@ Frames assignment rules:
 ### Digesting URDF file to populate DH table:
 Unified Robot Description Format or urdf, is an XML format used in ROS for representing a robot model. We can use a urdf file to define a robot model, its kinodynamic properties, visual elements and even model sensors for the robot.
 
-| Frame(i) | θ | 𝜶 | r | d |
+| Frame(i) | a | 𝜶 | d | θ |
 |-------|--------|---------|--------|---------|
-| 1 | θ1 | 90 | 0 | L1 |
-| 2 | θ2 | 0 | L2 | 0 |
-| 3 | θ3 | 0 | L3 | 0 |
-| 4 | θ4 + 90 | -90 | L4 | 0 |
-| 5 | θ5 | 0 | 0 | L5 |
+| 0 -> 1 | 0.000 | 0 | 0.75 | θ1 |
+| 1 -> 2 | 0.350 | 90| 0.00 | θ2 | 
+| 2 -> 3 | 1.250 | 0 | 0.00 | θ3+90 | 
+| 3 -> 4 | -0.054| 90| 1.50 | θ4 | 
+| 4 -> 5 | 0.0000|-90| 0.00 | θ5 |
+| 5 -> 6 | 0.000 | 90| 0.00 | θ6 |
+| 6 -> G | 0.000 |  0| 0.303|  0 |
 
 
 ## Inverse Kinematics of 6R KR210 arm:
