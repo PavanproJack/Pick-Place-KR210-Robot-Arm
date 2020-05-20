@@ -46,7 +46,7 @@ Assign the frames assuming all the joint co-ordinates are zero. For eg. zero rot
 ### Digesting URDF file to populate DH table:
 Unified Robot Description Format or urdf, is an XML format used in ROS for representing a robot model. We can use a urdf file to define a robot model, its kinodynamic properties, visual elements and even model sensors for the robot.
 
-| Frame(i) | a | 𝜶 | d | θ |
+| Frame(n-1 -> n) | a | 𝜶 | d | θ |
 |-------|--------|---------|--------|---------|
 | 0 -> 1 | 0.000 | 0 | 0.75 | θ1 |
 | 1 -> 2 | 0.350 | 90| 0.00 | θ2 | 
@@ -61,6 +61,35 @@ Unified Robot Description Format or urdf, is an XML format used in ROS for repre
 
 ### Kinematic Decoupling:
 Kinematic decoupling is used to consider position and orientation problems independently. Geometric approach is used for positioning problem and Euler angle parameterisation is used for orientation problem.
+
+Majority of six DOF manipualators used in industry have three neighboring joint axes intersect at a single point which makes up a spherical wrist. KR210 has a spherical wrist with its last three joint axes intersecting at a point called Wrist Center Wc. The position of the wrist center is governed by the first three joints. Let P be the position of gripper. R0_g is the rotation matrix obtained from Homogeneous transformation from the base to gripper.
+```
+Wrist center Wc = [P_x, P_y, P_z] - d7 * R0_g * [0 0 1]' and d7 from DH table is 0.303
+```
+### Euler composition of Rotations:
+According to Euler, any orientation(gripper's) w.r.t some fixed reference frame(base) can always be described by 3 elementary rotations in a given sequence. One such sequence is the z-y-x intrinsic rotations. 
+
+```
+R0_g = Rot(Z, yaw) * Rot(Y, pitch) * Rot(X, roll) * R_corr
+```
+Here 'yaw', 'pitch' and 'roll' angles and P_x, P_y, P_z are provided by Ros message "geometry_msgs". "geometry_msgs" provides messages for common geometric primitives such as points, vectors, and poses.
+
+
+
+
+
+Solve for the joint angles given the wrist center Wc in Geometric approach. 
+#### Inverse Position: A Geometric Approach:
+From the figure attached, Theta1 can be found to be 
+```
+θ1 = atan2(Wc_y, Wc_x)
+θ2 = 
+θ3 = 
+```
+
+#### Inverse Orientation: 
+
+
 
 
 
