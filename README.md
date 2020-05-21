@@ -6,7 +6,7 @@ This documentation demonstrates my perception and the steps involved in completi
 
 Initial setup of ROS+Gazebo with VMware Fusion can be found in the Installation_instr.md file in this repo.
 
-<img src = "/misc_images/misc1.png" width = "150">  
+<img src = "/misc1.png" width = "150">  
 
 ## Problem Statement:
 Identify target object on the shelf, plan and perform a clean movement towards the object to grasp the object and place the in in the bin.
