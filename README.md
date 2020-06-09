@@ -60,7 +60,7 @@ Unified Robot Description Format or urdf, is an XML format used in ROS for repre
 
 
 ## Inverse Kinematics of 6R KR210 arm:
-<img src = "/KukaKR210 Schematic.png" width = "700">   
+<img src = "KukaKR210 Schematic.png" width = "700">   
 
 ### Kinematic Decoupling:
 Kinematic decoupling is used to consider position and orientation problems independently. Geometric approach is used for positioning problem and Euler angle parameterisation is used for orientation problem.
@@ -84,7 +84,7 @@ Here 'yaw', 'pitch' and 'roll' angles and P_x, P_y, P_z are provided by Ros mess
 Solve for the joint angles given the wrist center Wc in Geometric approach. 
 #### Inverse Position: A Geometric Approach:
 
-<img src = "/Inverse Position Schematic.png" width = "500">  
+<img src = "Inverse Position Schematic.png" width = "500">  
 
 From the figure attached, Theta1 can be found to be 
 ```
