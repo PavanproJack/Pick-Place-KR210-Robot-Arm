@@ -4,9 +4,9 @@ This project is adopted from Udacity - Robotics NanoDegree Program. Modified and
 
 This documentation demonstrates my perception and the steps involved in completing this project. 
 
-Initial setup of ROS+Gazebo with VMware Fusion can be found in the Installation_instr.md file in this repo.
+Initial setup of ROS+Gazebo with VMware Fusion can be found in the Installation_instr.md file in this repo. changed.
 
-<img src = "/misc_images/Kuka_KR210.jpg" width = "150">  
+<img src = "/Kuka_KR210.jpg" width = "150">  
 
 ## Problem Statement:
 Identify target object on the shelf, plan and perform a clean movement towards the object to grasp the object and place the in in the bin.
