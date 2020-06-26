@@ -1,15 +1,3 @@
-#!/usr/bin/env python
-
-# Copyright (C) 2017 Udacity Inc.
-#
-# This file is part of Robotic Arm: Pick and Place project for Udacity
-# Robotics nano-degree program
-#
-# All Rights Reserved.
-
-# Author: Harsh Pandya
-
-# import modules
 import rospy
 import tf
 from kuka_arm.srv import *
@@ -35,7 +23,7 @@ def handle_calculate_IK(req):
         a0, a1, a2, a3, a4, a5, a6 = symbols('a0:7')  #
         alpha0, alpha1, alpha2, alpha3, alpha4, alpha5, alpha6 = symbols('alpha0:7')  # alpha twist angle..
 
-        dh = {
+        '''dh = {
             a0: 0,      alpha0: 0,      q1: q1,        d1: 0.75,
             a1: 0.35,   alpha1: pi/2,   q2: q2,        d2: 0.00,
             a2: 1.25,   alpha2: 0,      q3: q3 + pi/2, d3: 0.00,
@@ -43,6 +31,16 @@ def handle_calculate_IK(req):
             a4: 0,      alpha4: pi/2,   q5: q5,        d5: 0.00,
             a5: 0,      alpha5: pi/2,   q6: q6,        d6: 0.00,
             a6: 0,      alpha6: 0,      q7: 0,         d7: 0.303
+        }'''
+
+        dh = {
+            a0: 0,      alpha0: 0,       q1: q1,        d1: 0.75,
+            a1: 0.35,   alpha1: -pi/2,   q2: q2 - pi/2, d2: 0.00,
+            a2: 1.25,   alpha2: 0,       q3: q3,        d3: 0.00,
+            a3: -0.054, alpha3: -pi/2,   q4: q4,        d4: 1.50,
+            a4: 0,      alpha4: pi/2,    q5: q5,        d5: 0.00,
+            a5: 0,      alpha5: -pi/2,   q6: q6,        d6: 0.00,
+            a6: 0,      alpha6: 0,       q7: 0,         d7: 0.303
         }
 
         def homTransform(a, alpha, q, d):
@@ -74,14 +72,8 @@ def handle_calculate_IK(req):
              ])
             return R_z
 
-        def calculateJointAngles(R_EE, p_asMatrix, roll, pitch, yaw):
-            #Compensate for Rotation discrepancy
-            RotationError = Rot_Z(pi) * Rot_Y(-pi/2)
-            R_EE = R_EE * RotationError
-            R_EE = R_EE.subs({'r' : roll, 'p': pitch, 'y': yaw})
- 
-            #Wristcenter Wc :
-            Wc = p_asMatrix - 0.303 * R_EE[:, 2]
+        def calculateJointAngles(Wc):
+            
             Wc_x = Wc[0]
             Wc_y = Wc[1]
             Wc_z = Wc[2]
@@ -90,23 +82,21 @@ def handle_calculate_IK(req):
             
             theta_1 = atan2(Wc[1], Wc[0])
 
-            a = 1.501 # Found by using "measure" tool in RViz.
+            a = 1.501 
             b = sqrt(pow((sqd - 0.35), 2) + pow((Wc_z - 0.75), 2))
-            c = 1.25 # Length of joint 1 to 2.
+            c = 1.25 
 
-            alpha = acos((b*b + c*c - a*a) / (2*b*c))
-            beta = acos((a*a + c*c - b*b) / (2*a*c))
-            delta = atan2(Wc_z - 0.75, sqd - 0.35)
-            theta2 = pi/2 - alpha - delta
+            angle_a = acos((b*b + c*c - a*a) / (2*b*c))
+            angle_b = acos((a*a + c*c - b*b) / (2*a*c))
+            angle_c = acos((a*a - c*c + b*b) / (2*a*b))
 
-            # Look at Z position of -0.054 in link 4 and use it to calculate epsilon
-            epsilon = 0.036 
-            theta3 = pi/2 - (beta + epsilon)
-            return (R_EE, Wc, theta1, theta2, theta3)
+            delta =  atan2( Wc_z - 0.75, sqd - 0.35 )
+            theta2 = pi/2 - (angle_a + delta) 
 
+            theta3 = pi/2 - (angle_b + 0.036)
+            
+            return (theta1, theta2, theta3)
 
-
-        
 
         #Transformation matrices:
         T0_1 =  homTransform(a0, alpha0, q1, d1)
@@ -137,18 +127,17 @@ def handle_calculate_IK(req):
         # Initialize service response
         joint_trajectory_list = []
         for x in xrange(0, len(req.poses)):
-            # IK code starts here
+
             joint_trajectory_point = JointTrajectoryPoint()
 
-	    # Extract end-effector position and orientation from request
-	    # px,py,pz = end-effector position
-	    # roll, pitch, yaw = end-effector orientation
+            #End Effector Position
             px = req.poses[x].position.x
             py = req.poses[x].position.y
             pz = req.poses[x].position.z
-            
-            p_asMatrix = Matrix([[px], [py], [pz]])
 
+            EE_Matrix = Matrix([[px], [py], [pz]])
+
+            #End Effector Orientation angles
             (roll, pitch, yaw) = tf.transformations.euler_from_quaternion(
                 [req.poses[x].orientation.x, req.poses[x].orientation.y,
                     req.poses[x].orientation.z, req.poses[x].orientation.w])
@@ -156,40 +145,38 @@ def handle_calculate_IK(req):
             r, p, y = symbols('r, p, y')
             #Intrinsic rotation applied on end-effector.
             R_EE = Rot_Z(y) * Rot_Y(p) * Rot_X(r)
+            #Rotation Error
+            RotationError = Rot_Z(pi) * Rot_Y(-pi/2)
+            R_EE = R_EE * RotationError
+            # Substitute the End Effector Orientation angles for r, p, y
+            R_EE = R_EE.subs({'r' : roll, 'p': pitch, 'y': yaw})
 
-            R_EE, Wc, theta1, theta2, theta3 = calculateJointAngles(R_EE, p_asMatrix, roll, pitch, yaw)
+            #Wrist Center Position
+            Wc = EE_Matrix - 0.303 * R_EE[:, 2]
+            #Compute the Joint angles 1,2 & 3 from wrist center positions
+            theta1, theta2, theta3 = calculateJointAngles(Wc)
+
+            # Evaluate the Rotation Matrix from {0} to {3} with the obtained 
+            # theta1, theta2 & theta3 values.
 
             R0_3 = T0_1[0:3, 0:3] * T1_2[0:3, 0:3] * T2_3[0:3, 0:3]
             R0_3 = R0_3.evalf(subs = {q1: theta1, q2: theta2, q3: theta3 })
 
             R0_3_Tp = R0_3.T
+
+            # As we know that R_EE = R0_3 * R3_6 and inv(R0_3) = Transpose(R3_6) we can write,
             
             R3_6 = R0_3_Tp * R_EE
 
-            theta6 = atan2(-R3_6[1,1], R3_6[1,0])# +0.45370228
-            sq5 = -R3_6[1,1]/sin(theta6)
-            cq5 = R3_6[1,2]
-            theta5 = atan2(sq5, cq5)
-            sq4 = R3_6[2,2]/sin(theta5)
-            cq4 = -R3_6[0,2]/sin(theta5)
-            theta4 = atan2(sq4, cq4)
+            # Now that we know the Rotation matrix from {3} to {6} and the 
+            # End Effector Orientation at {6}. So from R3_6, Euler angles can be extracted 
+            # and equalled with obtained roll, pitch and yaw angles.
+
+            theta4 = atan2(R3_6[2,2], -R3_6[0,2])
+            theta5 = atan2( sqrt(R3_6[0,2]**2 + R3_6[2,2]**2), R3_6[1,2] )
+            theta6 = atan2(-R3_6[1,1], R3_6[1,0])
 
 
-
-
-
-
-            ### Your IK code here
-	    # Compensate for rotation discrepancy between DH parameters and Gazebo
-	    # 
-	    #
-	    # Calculate joint angles using Geometric IK method
-	    #
-	    #
-        ###
-
-        # Populate response for the IK request
-        # In the next line replace theta1,theta2...,theta6 by your joint angle variables
 	    joint_trajectory_point.positions = [theta1, theta2, theta3, theta4, theta5, theta6]
 	    joint_trajectory_list.append(joint_trajectory_point)
 
