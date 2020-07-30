@@ -85,14 +85,7 @@ Solve for the joint angles given the wrist center Wc in Geometric approach.
 #### Inverse Position: A Geometric Approach:
 
 <img src = "Inverse Position Schematic.png" width = "500">  
-
-From the figure attached, Theta1 can be found to be 
-```
-θ1 = atan2(Wc_y, Wc_x)
-θ2 = ....................
-θ3 = 
-
-```
+ 
  
 
 #### Inverse Orientation: 
